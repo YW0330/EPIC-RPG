@@ -1,0 +1,2 @@
+import rpg
+rpg.run()
