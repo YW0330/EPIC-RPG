@@ -1,4 +1,4 @@
 URL = 
-CHANNEL = 
+CHANNEL = #
 ACCOUNT = 
 PASSWORD = 
