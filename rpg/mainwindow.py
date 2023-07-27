@@ -2,10 +2,11 @@ from PyQt5.QtWidgets import QMainWindow
 from rpg.util import ADTPATH
 from rpg.ui.ui_mainwindow import Ui_MainWindow
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
 import os
 import time
 
@@ -57,9 +58,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         prefs = {"credentials_enable_service": False,
                  "profile.password_manager_enabled": False}
         chrome_options.add_experimental_option("prefs", prefs)
-        service = ["hide_console"]
-        self.driver = webdriver.Chrome(ChromeDriverManager().install(
-        ), chrome_options=chrome_options, service_args=service)
+        service = ChromeService(ChromeDriverManager().install())
+        service.creation_flags = 0x08000000
+        self.driver = webdriver.Chrome(
+            service=service, options=chrome_options)
         self.driver.implicitly_wait(30)
         self.driver.get(url)
         self.inputPassword()
@@ -85,7 +87,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             time.sleep(0.1)
             line.send_keys(Keys.DELETE)
             sendCmd = self.listWidget.currentItem().text()
-            line.send_keys("<@555955826880413696> "+sendCmd)
+            line.send_keys("rpg "+sendCmd)
             line.send_keys(Keys.ENTER)
         except:
             print("Runtime error")
